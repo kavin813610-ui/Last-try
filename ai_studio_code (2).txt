@@ -1,0 +1,91 @@
+import React from 'react';
+import { StoreProvider, useStore } from './context/StoreContext';
+import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
+import { HomePage } from './components/HomePage';
+import { ShopCatalog } from './components/ShopCatalog';
+import { ProductDetailPage } from './components/ProductDetailPage';
+import { CartSlideOver } from './components/CartSlideOver';
+import { CheckoutPage } from './components/CheckoutPage';
+import { OrderSuccessPage } from './components/OrderSuccessPage';
+import { TrackOrderPage } from './components/TrackOrderPage';
+import { WishlistPage } from './components/WishlistPage';
+import { AboutPage } from './components/AboutPage';
+import { ContactPage } from './components/ContactPage';
+import { PolicyPages } from './components/PolicyPages';
+import { AdminDashboard } from './components/AdminDashboard';
+
+function AppContent() {
+  const { currentView } = useStore();
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[#faf9f6] text-neutral-900 font-sans-body selection:bg-amber-400 selection:text-neutral-950">
+      {/* Top Navigation */}
+      {currentView !== 'admin' && <Navbar />}
+
+      {/* Main View Router */}
+      <main className="flex-1">
+        {currentView === 'home' && <HomePage />}
+
+        {currentView === 'shop' && (
+          <ShopCatalog
+            categoryTitle="The Complete N Collection Catalog"
+            categorySubtitle="Every timepiece is bench-tested on our electronic timegrapher, checked under 10x optical magnification, and packaged for insured Speed Post delivery across India."
+          />
+        )}
+
+        {currentView === 'mens' && (
+          <ShopCatalog
+            genderFilter="Men"
+            categoryTitle="Men's Watch Collection"
+            categorySubtitle="Precision mechanical chronographs, 200M automatic divers, and executive dress pieces crafted for resilience and distinction."
+          />
+        )}
+
+        {currentView === 'womens' && (
+          <ShopCatalog
+            genderFilter="Women"
+            categoryTitle="Women's Watch Collection"
+            categorySubtitle="Jewelry-grade craftsmanship featuring genuine iridescent mother-of-pearl dials, crystal hour markers, and petite automatic calibers."
+          />
+        )}
+
+        {currentView === 'collections' && (
+          <ShopCatalog
+            categoryTitle="Curated Horology Vaults"
+            categorySubtitle="Explore themed editions including Heritage Column-Wheel Chronos, ISO 200M Divers, and Ultra-Slim Champagne Gold dress pieces."
+          />
+        )}
+
+        {currentView === 'product-detail' && <ProductDetailPage />}
+        {currentView === 'checkout' && <CheckoutPage />}
+        {currentView === 'order-success' && <OrderSuccessPage />}
+        {currentView === 'track-order' && <TrackOrderPage />}
+        {currentView === 'wishlist' && <WishlistPage />}
+        {currentView === 'about' && <AboutPage />}
+        {currentView === 'contact' && <ContactPage />}
+
+        {currentView === 'policy-privacy' && <PolicyPages policyType="privacy" />}
+        {currentView === 'policy-terms' && <PolicyPages policyType="terms" />}
+        {currentView === 'policy-shipping' && <PolicyPages policyType="shipping" />}
+        {currentView === 'policy-returns' && <PolicyPages policyType="returns" />}
+
+        {currentView === 'admin' && <AdminDashboard />}
+      </main>
+
+      {/* Cart Drawer */}
+      <CartSlideOver />
+
+      {/* Footer */}
+      {currentView !== 'admin' && <Footer />}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <StoreProvider>
+      <AppContent />
+    </StoreProvider>
+  );
+}

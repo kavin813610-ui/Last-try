@@ -1,0 +1,145 @@
+import React, { useState } from 'react';
+import { WatchProduct } from '../types/store';
+import { useStore } from '../context/StoreContext';
+import { Heart, Star, ShoppingBag, Eye, ShieldCheck } from 'lucide-react';
+
+export const ProductCard: React.FC<{ product: WatchProduct }> = ({ product }) => {
+  const { openProductDetail, addToCart, toggleWishlist, isInWishlist } = useStore();
+  const [selectedColor, setSelectedColor] = useState(
+    product.selectedDefaultColor || product.colors[0]?.name || ''
+  );
+
+  const isFavorited = isInWishlist(product.id);
+
+  return (
+    <div className="group bg-white rounded-xl border border-neutral-200 hover:border-amber-400/60 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-neutral-100 cursor-pointer" onClick={() => openProductDetail(product.id)}>
+        <img
+          src={product.images[0]}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+
+        {/* Demonstration Tag */}
+        {product.isDemonstration && (
+          <span className="absolute top-3 left-3 bg-neutral-900/85 backdrop-blur-md text-amber-300 text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border border-amber-400/30">
+            Demo Sample
+          </span>
+        )}
+
+        {/* Wishlist Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleWishlist(product.id);
+          }}
+          className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-colors ${
+            isFavorited
+              ? 'bg-rose-500 text-white'
+              : 'bg-white/80 text-neutral-700 hover:text-rose-500 hover:bg-white'
+          }`}
+          title="Save to Wishlist"
+        >
+          <Heart className={`w-4 h-4 ${isFavorited ? 'fill-current' : ''}`} />
+        </button>
+
+        {/* Stock Badge */}
+        {!product.isAvailable || product.stockCount <= 0 ? (
+          <div className="absolute inset-0 bg-neutral-950/60 flex items-center justify-center">
+            <span className="bg-neutral-950 text-neutral-300 font-semibold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full border border-neutral-700">
+              Sold Out
+            </span>
+          </div>
+        ) : product.stockCount <= 3 ? (
+          <span className="absolute bottom-3 left-3 bg-amber-500/90 text-neutral-950 font-bold text-[10px] px-2 py-0.5 rounded">
+            Only {product.stockCount} Left
+          </span>
+        ) : null}
+      </div>
+
+      {/* Info Container */}
+      <div className="p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between text-xs text-neutral-500 mb-1">
+            <span className="uppercase tracking-widest text-[11px] font-semibold text-amber-700">
+              {product.brand}
+            </span>
+            <div className="flex items-center gap-1 text-amber-600 font-medium">
+              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+              <span>{product.rating}</span>
+              <span className="text-neutral-400">({product.reviewsCount})</span>
+            </div>
+          </div>
+
+          <h3
+            onClick={() => openProductDetail(product.id)}
+            className="font-serif-display text-lg font-bold text-neutral-900 group-hover:text-amber-800 transition-colors cursor-pointer line-clamp-1"
+          >
+            {product.name}
+          </h3>
+
+          <p className="text-xs text-neutral-500 line-clamp-2 mt-1">
+            {product.summary}
+          </p>
+
+          {/* Color swatches */}
+          {product.colors.length > 1 && (
+            <div className="flex items-center gap-1.5 mt-3">
+              {product.colors.map((c) => (
+                <button
+                  key={c.name}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedColor(c.name);
+                  }}
+                  title={c.name}
+                  style={{ backgroundColor: c.hex }}
+                  className={`w-3.5 h-3.5 rounded-full border transition-all ${
+                    selectedColor === c.name
+                      ? 'ring-2 ring-amber-500 scale-110 border-white'
+                      : 'border-neutral-300 hover:scale-105'
+                  }`}
+                />
+              ))}
+              <span className="text-[10px] text-neutral-400 ml-1">
+                {product.colors.length} dials
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Pricing & CTA */}
+        <div className="pt-4 mt-4 border-t border-neutral-100 flex items-center justify-between">
+          <div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-lg font-extrabold text-neutral-950">
+                ₹{product.price.toLocaleString('en-IN')}
+              </span>
+              {product.originalPrice > product.price && (
+                <span className="text-xs text-neutral-400 line-through">
+                  ₹{product.originalPrice.toLocaleString('en-IN')}
+                </span>
+              )}
+            </div>
+            {product.discountPercent > 0 && (
+              <span className="text-[10px] font-bold text-emerald-600">
+                {product.discountPercent}% OFF
+              </span>
+            )}
+          </div>
+
+          <button
+            onClick={() => addToCart(product, 1, selectedColor)}
+            disabled={!product.isAvailable || product.stockCount <= 0}
+            className="bg-neutral-950 hover:bg-amber-600 text-white hover:text-neutral-950 p-2.5 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Add to Shopping Bag"
+          >
+            <ShoppingBag className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

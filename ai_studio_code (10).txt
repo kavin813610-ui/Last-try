@@ -1,0 +1,134 @@
+import React from 'react';
+import { useStore } from '../context/StoreContext';
+import { Mail, Phone, MapPin, ShieldCheck, Clock, Lock } from 'lucide-react';
+
+export const Footer: React.FC = () => {
+  const { navigate } = useStore();
+
+  return (
+    <footer className="bg-neutral-950 text-neutral-300 border-t border-neutral-800 mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand Info */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center font-serif-display font-bold text-neutral-950 text-xl">
+                N
+              </div>
+              <span className="font-serif-display text-2xl font-bold tracking-wider text-white">
+                N Collection
+              </span>
+            </div>
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              Curated horology and luxury timepieces headquartered in Andaman & Nicobar Islands, India.
+              Serving discerning watch collectors pan-India with authenticated calibers and certified regulation.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-3">
+            <h4 className="font-serif-display text-base font-bold text-white uppercase tracking-wider">
+              Quick Navigation
+            </h4>
+            <ul className="space-y-2 text-xs">
+              <li>
+                <button onClick={() => navigate('home')} className="hover:text-amber-400 transition-colors">
+                  Home
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('shop')} className="hover:text-amber-400 transition-colors">
+                  Shop All Watches
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('mens')} className="hover:text-amber-400 transition-colors">
+                  Men's Timepieces
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('womens')} className="hover:text-amber-400 transition-colors">
+                  Women's Timepieces
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('track-order')} className="hover:text-amber-400 transition-colors">
+                  Track Your Order
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('about')} className="hover:text-amber-400 transition-colors">
+                  Our Horology Workshop
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal & Compliance */}
+          <div className="space-y-3">
+            <h4 className="font-serif-display text-base font-bold text-white uppercase tracking-wider">
+              Policies & Consumer Protection
+            </h4>
+            <ul className="space-y-2 text-xs">
+              <li>
+                <button onClick={() => navigate('policy-shipping')} className="hover:text-amber-400 transition-colors">
+                  Shipping & Pan-India Delivery Policy
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('policy-returns')} className="hover:text-amber-400 transition-colors">
+                  7-Day Return & Replacement Policy
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('policy-privacy')} className="hover:text-amber-400 transition-colors">
+                  Privacy Policy (DPDP Act Compliance)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('policy-terms')} className="hover:text-amber-400 transition-colors">
+                  Terms & Conditions of Sale
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Details */}
+          <div className="space-y-3">
+            <h4 className="font-serif-display text-base font-bold text-white uppercase tracking-wider">
+              Workshop Contact
+            </h4>
+            <ul className="space-y-2.5 text-xs text-neutral-400">
+              <li className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <span>Port Blair, Andaman & Nicobar Islands - 744101, India</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                <a href="tel:+918089059933" className="hover:text-white">+91 8089059933</a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+                <a href="mailto:n45349897@gmail.com" className="hover:text-white">n45349897@gmail.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar & Admin Link */}
+        <div className="pt-8 mt-12 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
+          <p>© {new Date().getFullYear()} N Collection. All rights reserved. Prices quoted in Indian Rupees (₹).</p>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('admin')}
+              className="flex items-center gap-1.5 text-neutral-400 hover:text-amber-300 transition-colors"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>Admin Portal</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
